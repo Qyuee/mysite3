@@ -14,9 +14,8 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board">
-					<input type="hidden" name='a' value='modify'>
-					<input type="hidden" name='bno' value='${vo.bno }'>
+				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/modify">
+					<input type="hidden" name='bno' value='${vo.bno }'> 
 					<input type="hidden" name='nowPage' value="${param.nowPage }" > 
 					<input type="hidden" name='kwd' value="${param.kwd }">
 					<table class="tbl-ex">
@@ -34,8 +33,8 @@
 							</td>
 						</tr> 
 					</table>
-					<div class="bottom">
-						<a href="${pageContext.servletContext.contextPath }/board?a=view&bno=${param.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">취소</a>
+					<div class="bottom"> 
+						<a href="${pageContext.servletContext.contextPath }/board/view?bno=${param.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">취소</a>
 						<input type="submit" value="수정">  
 					</div>
 				</form>				

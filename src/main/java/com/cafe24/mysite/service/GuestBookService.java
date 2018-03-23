@@ -18,10 +18,12 @@ public class GuestBookService {
 	}
 	
 	public void insertGuestBookVo(GuestBookVo vo) {
-		guestBookDao.insert(vo);
+		System.out.println(vo);
+		guestBookDao.insert(vo); 
+		System.out.println(vo);
 	}
 	
-	public boolean deleteOneGuestBook(int no, String password) {
+	public int deleteOneGuestBook(int no, String password) {
 		return guestBookDao.delete(no, password);
 	}
 }

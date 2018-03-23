@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- <![CDATA]] 가 없으면 >와 같은 문자를 태그로 인식하여 에러 발생 가능함. -->
+<mapper namespace="user">
+	<select id="getByEmailAndPassword" parameterType="uservo" resultType="uservo">
+		<![CDATA[
+		select no, name, email, gender 
+		from users
+		where email= #{email } and password=password(#{password })
+		]]> 
+	</select>
+	
+	<insert id="insert" parameterType="uservo">
+		<![CDATA[
+			insert into 
+			users 
+			values(null, #{name }, #{email }, password(#{password }), #{gender }, now())
+		]]> 
+	</insert>
+	
+</mapper>

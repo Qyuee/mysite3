@@ -42,11 +42,11 @@
 				</table> 
 				<div class="bottom"> 
 					<a href="${pageContext.servletContext.contextPath }/board?nowPage=${param.nowPage }&kwd=${param.kwd }">글목록</a>
-					<c:if test="${sessionScope.authUser.no == vo.no }">  
-						<a href="${pageContext.servletContext.contextPath }/board?a=modifyform&bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">글수정</a>
+					<c:if test="${sessionScope.authUser.no == vo.no }">
+						<a href="${pageContext.servletContext.contextPath }/board/modify?bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">글수정</a>
 					</c:if> 
 					<c:if test="${not empty sessionScope.authUser.no }">
-						<a href="${pageContext.servletContext.contextPath }/board?a=replyform&bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">답글 달기</a>
+						<a href="${pageContext.servletContext.contextPath }/board/reply?bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">답글 달기</a>
 					</c:if>
 				</div>
 			</div>

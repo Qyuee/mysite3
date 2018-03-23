@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="board">
+	<select id="listGet" parameterType="map" resultType="boardvo">
+		<![CDATA[
+		select bno, title, content,
+		 group_no, order_no,
+		 depth, cnt,
+		 date_format(created_date, '%Y년 %m월 %d일 %H:%i:%s') as createdDate, 
+		 u.no, u.name as uname
+		 from board b, users u
+		 where (b.no=u.no)
+		]]>
+		<choose>
+			<when test="kwd != null">
+			<![CDATA[
+				and ((b.title like CONCAT('%', #{kwd }, '%')) or 
+				(b.content like CONCAT('%', #{kwd }, '%')))
+				order by group_no desc, order_no asc
+				limit #{startNum }, #{endNum }
+			]]>
+			</when>
+			<otherwise>
+			<![CDATA[
+				order by group_no desc, order_no asc
+				limit #{startNum }, #{endNum }
+			]]>
+			</otherwise>
+		</choose>
+	</select>
+	
+	<insert id="insert" parameterType="boardvo">
+		<![CDATA[
+		insert into 
+		board 
+		values(
+		null, #{title }, #{content },
+		(select ifnull(max(group_no), 0)+1 from board b), 1, 0, 0, now(), #{no })
+		]]>
+	</insert>
+	
+	<insert id="reply" parameterType="map">
+		<![CDATA[
+			insert into board values(null, #{cVo.title }, #{cVo.content }, #{pVo.groupNo},
+			 #{pVo.orderNo }, #{pVo.depth }, 0, now(), #{cVo.no })
+		]]>
+	</insert>
+	
+	<update id="reply_update" parameterType="map">
+		<![CDATA[ 
+			update board set order_no = order_no+1
+			where group_no = #{groupNo } and order_no >= #{orderNo }
+		]]>
+	</update>
+	
+	<!-- 하나의 파라미터만 매핑을 할 경우 ${value }를 사용한다.  -->
+	<select id="totalCount" parameterType="String" resultType="int">
+		<![CDATA[
+			select count(bno) from board
+		]]>
+		<choose> 
+			<when test="'#{value }' !=null"> 
+			<![CDATA[   
+				where ((title like CONCAT('%', '${value }', '%')) or 
+				(content like CONCAT('%', '${value }', '%')))
+			]]>
+			</when>
+		</choose>
+	</select>
+	
+	<delete id="delete" parameterType="int">
+	<![CDATA[ 
+	delete from board where bno= '${value }'
+	]]>
+	</delete>
+	
+	<select id="getInfo" parameterType="int" resultType="boardvo">
+	<![CDATA[
+	select bno, title, content, group_no, order_no, depth,
+	cnt, date_format(created_date, '%Y년 %m월 %d일 %H:%i:%s') as createdDate, u.no, u.name as uname
+	from board b, users u
+	where (b.no=u.no) and bno = '${value }'
+	]]>
+	</select>
+	
+	<update id="modify" parameterType="boardvo">
+	<![CDATA[
+	update board set title = #{title }, content = #{content} where bno = #{bno }
+	]]>
+	</update>
+	
+	<update id="increaseCnt" parameterType="int">
+	<![CDATA[
+	update board set cnt=cnt+1 where bno='${value }' 
+	]]>
+	</update>
+</mapper>

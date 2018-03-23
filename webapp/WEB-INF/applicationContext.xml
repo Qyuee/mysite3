@@ -11,11 +11,12 @@
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
         http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
 
-	<!-- 어노테이션으로 스캐닝을 시작한다. --> 
+	<!-- 어노테이션으로 스캐닝을 시작한다. -->
 	<context:annotation-config />
-	
+
 	<!-- 모두 스캐닝하는 것은 비효율적이르모 base-package를 설정 -->
-	<context:component-scan base-package="com.cafe24.mysite.repository, com.cafe24.mysite.service"> 
+	<context:component-scan
+		base-package="com.cafe24.mysite.repository, com.cafe24.mysite.service">
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Repository" />
 		<context:include-filter type="annotation"
@@ -23,6 +24,41 @@
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Component" />
 	</context:component-scan>
+
+	<!-- Connection Pool DataSource -->
+	<!-- DAO가 DBCP의 Connection Pool을 사용해야 하므로 Root context가 생성 될 때 datasource 
+		빈이 함께 생성되어야 한다. -->
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/webdb" />
+		<property name="username" value="webdb" />
+		<property name="password" value="webdb" />
+		<property name="maxActive" value="10" />
+		<property name="initialSize" value="8" /> 
+	</bean>
+
+
+	<!-- MyBatis SqlSessionFactoryBean 
+	
+	SqlSessionFactory sqlsessionfactory=new SqlSessionFactoryBean();
+	s.setDateSource(datasource);
+	s.setConfigLocation(value);
+	
+	SqlSession sqlSession=new SqlSessionTemplate(sqlsessionFactory);
+	
+	sqlSession을 DI하여 사용
+	 
+	-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" /> 
+		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
+	</bean>
+
+
+	<!-- MyBatis SqlSessionTemplate -->
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
 
 
 </beans>

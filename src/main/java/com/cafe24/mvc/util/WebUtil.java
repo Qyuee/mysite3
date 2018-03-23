@@ -61,6 +61,7 @@ public class WebUtil {
 	 * 페이징 처리
 	 * @param nowPage
 	 * @param totalCount
+	 * @param kwd
 	 * @return Map<String, String>
 	 */
 	public static Map<String, String> Paging(int nowPage, int totalCount, String kwd){
@@ -80,19 +81,19 @@ public class WebUtil {
 		}
 		
 		if(startPage!=1) {
-			page.put("◀", "/mysite/board?nowPage="+(startPage-1)+"&kwd="+kwd); 
+			page.put("◀", "/mysite3/board?nowPage="+(startPage-1)+"&kwd="+kwd); 
 		}
 		
 		for(int i=startPage; i<=endPage; i++) {
 			if(i>totalPage) {
 				page.put(String.valueOf(i), "none");
 			}else {
-				page.put(String.valueOf(i), "/mysite/board?nowPage="+i+"&kwd="+kwd);
+				page.put(String.valueOf(i), "/mysite3/board?nowPage="+i+"&kwd="+kwd);
 			}
 		}
 		
-		if(endPage < totalPage) {
-			page.put("▶", "/mysite/board?nowPage="+(endPage+1)+"&kwd="+kwd);  
+		if(endPage < totalPage) { 
+			page.put("▶", "/mysite3/board?nowPage="+(endPage+1)+"&kwd="+kwd);  
 		}
 		
 		return page;

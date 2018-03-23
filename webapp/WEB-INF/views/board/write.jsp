@@ -14,14 +14,14 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content">
 			<div id="board">
-				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board">
+				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/write"> 
 					<c:choose>
 						<c:when test="${not empty pVo }">
 							<input type = "hidden" name = "a" value="reply">
 							<input type = "hidden" name = "bno" value="${param.bno }" > 
-							<input type = "hidden" name = "nowPage" value="${param.nowPage }" >
+							<input type = "hidden" name = "nowPage" value="${param.nowPage }" > 
 						</c:when>
-						<c:otherwise>
+						<c:otherwise> 
 							<input type = "hidden" name = "a" value="write">
 							<input type = "hidden" name = "nowPage" value="1" >
 						</c:otherwise>
@@ -59,9 +59,9 @@
 					<div class="bottom">
 						<c:choose>
 							<c:when test="${not empty pVo }">
-								<a href="${pageContext.servletContext.contextPath }/board?a=view&bno=${param.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">취소</a>
+								<a href="${pageContext.servletContext.contextPath }/board/view?bno=${param.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">취소</a>
 							</c:when>
-							<c:otherwise> 
+							<c:otherwise>
 								<a href="${pageContext.servletContext.contextPath }/board?nowPage=${param.nowPage }&kwd=${param.kwd }">취소</a>
 							</c:otherwise>
 						</c:choose>

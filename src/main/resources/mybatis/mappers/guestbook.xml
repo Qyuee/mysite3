@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guestbook">
+	<select id="getList" resultType="guestbookvo">
+		<![CDATA[
+			select 
+			no, 
+			name, 
+			content,  
+			date_format(to_date, '%Y년 %m월 %d일 %H시 %i분 %s초') as to_date
+			from guestbook 
+			order by no desc
+		]]>
+	</select>
+	
+	<delete id="delete" parameterType="map">
+		<![CDATA[
+		delete
+		from guestbook
+		where no = #{no }
+		 and password = password(#{pwd })
+		]]>
+	</delete>
+	
+	<!-- 넘어온 객체의 no에 키 값을 넣겠다.
+	
+	keyProperty : 객체의 어떤 필드에 키 값을 넣을 것인지 선택
+	resultType : 타입
+	order : insert문을 수행 후 할 것인가? 전에 할 것인가? after or before
+	
+	 -->
+	<insert id="insert" parameterType="guestbookvo">
+		<![CDATA[
+		insert into guestbook 
+		values(null, #{name }, password(#{password }), #{content }, now()) 
+		]]>
+		
+		<selectKey keyProperty="no" resultType="Long" order="AFTER">
+			select last_insert_id()
+		</selectKey>
+	</insert>
+</mapper>

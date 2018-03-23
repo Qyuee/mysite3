@@ -2,20 +2,27 @@ package com.cafe24.mysite.repository;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.cafe24.mysite.db.DBClose;
-import com.cafe24.mysite.db.DBOpen;
 import com.cafe24.mysite.exception.ExceptionWrapper;
-import com.cafe24.mysite.exception.UserDaoException;
 import com.cafe24.mysite.vo.UserVo;
 
 @Repository
 public class UserDao {
+	
+	@Autowired
+	private DataSource dataSource;
+	
+	@Autowired
+	private SqlSession sqlsession;
 	
 	/**
 	 * 회원 정보 수정
@@ -28,7 +35,7 @@ public class UserDao {
 		PreparedStatement pstmt=null;
 		
 		try {
-			conn=DBOpen.getConnection();
+			conn=dataSource.getConnection();
 			
 			String sql="update users";
 			
@@ -71,13 +78,13 @@ public class UserDao {
 	 * @param vo
 	 * @return
 	 */
-	public UserVo get(UserVo vo) {
-		UserVo result=new UserVo();
-		Connection conn=null;
+	public UserVo get(UserVo vo) { 
+		return sqlsession.selectOne("user.getByEmailAndPassword", vo);
+		/*Connection conn=null;
 		PreparedStatement pstmt=null;
-		ResultSet rs=null;
+		ResultSet rs=null;*/
 		
-		try {
+		/*try {
 			conn=DBOpen.getConnection();
 			String sql="select no, name, email, gender " + 
 					" from users " +
@@ -98,9 +105,9 @@ public class UserDao {
 			throw new ExceptionWrapper(this.getClass().getName());   // 에러를 RuntimeException으로 전환하여 전달.
 		} finally {
 			DBClose.DBclose(conn, pstmt, rs);
-		}
+		}*/
 		
-		return result;
+		//return result;
 	}
 	
 	/**
@@ -108,13 +115,14 @@ public class UserDao {
 	 * @param vo
 	 * @return boolean
 	 */
-	public boolean insert(UserVo vo) {
-		boolean result=false;
+	public int insert(UserVo vo) {
+		return sqlsession.insert("user.insert",vo);
+		/*boolean result=false;
 		Connection conn=null;
 		PreparedStatement pstmt=null;
 		
 		try {
-			conn=DBOpen.getConnection();  
+			conn=dataSource.getConnection();  
 			String sql="insert into users values(null, ?, ?, password(?), ?, now()); "; 
 			pstmt=conn.prepareStatement(sql); 
 			pstmt.setString(1, vo.getName()); 
@@ -132,10 +140,7 @@ public class UserDao {
 			DBClose.DBclose(conn, pstmt);
 		}
 		
-		return result;
+		return result;*/
 	}
 	
-	public List<UserVo> getList(){
-		return null;
-	}
 }

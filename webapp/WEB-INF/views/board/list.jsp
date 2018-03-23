@@ -15,12 +15,10 @@
 		<c:import url="/WEB-INF/views/includes/header.jsp" />
 		<div id="content"> 
 			<div id="board"> 
-				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="post">
+				<form id="search_form" action="${pageContext.servletContext.contextPath }/board" method="GET">
 					<button class="btn_all" type="button" onclick="location='${pageContext.servletContext.contextPath }/board?nowPage=1'">전체보기</button>
-					<input type="hidden" name="a" value="list" >
 					<input type="text" id="kwd" name="kwd" value="${param.kwd }">
 					<input type="hidden" name='nowPage' value="1"> 
-					<input type="hidden" name='kwd' value="${param.kwd }">
  					<input type="submit" value="찾기">
 				</form>
 				 
@@ -52,22 +50,22 @@
 					</tr>
 					
 					<!-- 반복 시작 -->
-					<c:set var="count" value="${fn:length(list) }" />
+					<c:set var="count" value="${fn:length(list) }" /> 
 					<c:forEach items="${list }" var="vo" varStatus="status">
 						<tr>
-							<td>${totalCount - (param.nowPage-1)*5 - status.index }</td> 
+							<td>${totalCount - (nowPage-1)*5 - status.index }</td> 
 							<td style="text-align: left;">
 								<c:if test="${vo.depth > 0 }">
 									<img src="${pageContext.servletContext.contextPath }/images/reply.png" style="padding-left: ${vo.depth*20}px;"> 
 								</c:if>
-								<a href="${pageContext.servletContext.contextPath }/board?a=view&bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">${vo.title }</a></td>
+								<a href="${pageContext.servletContext.contextPath }/board/view?bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }">${vo.title }</a></td>
 							<td>${vo.uname }</td> 
 							<td>${vo.cnt }</td>
 							<td>${vo.createdDate }</td> 
 							<td>
 								<c:if test="${sessionScope.authUser.no == vo.no }">
-									<a href="${pageContext.servletContext.contextPath }/board?a=delete&bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }" class="del">삭제</a>
-								</c:if>
+									<a href="${pageContext.servletContext.contextPath }/board/delete?bno=${vo.bno }&nowPage=${param.nowPage }&kwd=${param.kwd }" class="del">삭제</a>
+								</c:if> 
 							</td> 
 						</tr>
 					</c:forEach>
@@ -102,10 +100,10 @@
 				</div>				
 				<div class="bottom"> 
 					<c:if test="${not empty sessionScope.authUser.no }">
-						<a href="${pageContext.servletContext.contextPath }/board?a=writeform&nowPage=${param.nowPage }&kwd=${param.kwd }" id="new-book">글쓰기</a>
+						<a href="${pageContext.servletContext.contextPath }/board/write?nowPage=${param.nowPage }&kwd=${param.kwd }" id="new-book">글쓰기</a>
 					</c:if>
 				</div>				
-			</div> 
+			</div>  
 		</div>
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />

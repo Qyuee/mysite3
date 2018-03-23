@@ -28,6 +28,7 @@ public class GuestBookController {
 	@RequestMapping(value="", method=RequestMethod.POST)
 	public String insert(@ModelAttribute GuestBookVo vo) {
 		System.out.println(" >> called list POST");
+		System.out.println(vo );
 		guestBookService.insertGuestBookVo(vo);
 		return "redirect:/guestbook"; 
 	} 
@@ -48,12 +49,12 @@ public class GuestBookController {
 		System.out.println(" >> called del POST");
 		System.out.println(no); 
 		System.out.println(password);
-		Boolean result=guestBookService.deleteOneGuestBook(no, password);
+		int result=guestBookService.deleteOneGuestBook(no, password);
 		System.out.println(result); 
-		if(result==false) {
+		if(result==0) { 
+			// 리다이렉트 할 때 model.addAttribute()를 하면 url뒤에 파라미터가 붙음.
 			model.addAttribute("result", result);
-			//return "forward:/WEB-INF/views/guestbook/list.jsp";
-			return "forward:/guestbook/del";
+			return "redirect:/guestbook";  
 		}
 		
 		return "redirect:/guestbook";

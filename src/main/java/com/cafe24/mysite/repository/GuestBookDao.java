@@ -1,34 +1,36 @@
 package com.cafe24.mysite.repository;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import javax.sql.DataSource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.cafe24.mvc.util.WebUtil;
-import com.cafe24.mysite.db.DBClose;
-import com.cafe24.mysite.db.DBOpen;
 import com.cafe24.mysite.vo.GuestBookVo;
 
 @Repository
-public class GuestBookDao {
+public class GuestBookDao { 
+	@Autowired
+	private DataSource dataSource;
 	
+	@Autowired
+	private SqlSession sqlSession;
 	/**
 	 * 방명록 리스트 출력
 	 * @return List<GuestBookVo>
 	 */
 	public List<GuestBookVo> getList(){
-		List<GuestBookVo> list=new ArrayList<>();
+		return sqlSession.selectList("guestbook.getList");
+		/*List<GuestBookVo> list=new ArrayList<>();
 		Connection conn=null;
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
-		
 		try {
-			conn=DBOpen.getConnection();
+			conn=dataSource.getConnection();
 			String sql="select no, name, content, date_format(to_date, '%Y년 %m월 %d일 %H시 %i분 %s초') as to_date "
 					+ "from guestbook order by no desc ";
 			pstmt=conn.prepareStatement(sql);
@@ -50,7 +52,7 @@ public class GuestBookDao {
 			DBClose.DBclose(conn, pstmt, rs);
 		}
 		
-		return list;
+		return list;*/
 	}
 	
 	/**
@@ -58,15 +60,18 @@ public class GuestBookDao {
 	 * @param vo
 	 * @return boolean
 	 */
-	public boolean insert(GuestBookVo vo) {
-		boolean result=false;
+	public int insert(GuestBookVo vo) {
+		int count = sqlSession.insert("guestbook.insert", vo); 
+		
+		return count; 
+		/*boolean result=false;
 		
 		int count=0;
 		Connection conn=null;
 		PreparedStatement pstmt=null;
 		
 		try {
-			conn=DBOpen.getConnection();
+			conn=dataSource.getConnection();
 			String sql="insert into guestbook "
 					+ "values(null, ?, password(?), ?, now()) ";
 			pstmt=conn.prepareStatement(sql);
@@ -87,7 +92,7 @@ public class GuestBookDao {
 		}
 		
 		
-		return result;
+		return result;*/
 	}
 	
 	/**
@@ -96,15 +101,18 @@ public class GuestBookDao {
 	 * @param pass
 	 * @return
 	 */
-	public boolean delete(int no, String pass) {
-		boolean result=false;
-		
+	public int delete(int no, String pass) {
+		Map<String, Object> map=new HashMap<>();
+		map.put("no", no); 
+		map.put("pwd", pass);
+		return sqlSession.delete("guestbook.delete", map); 
+		/*boolean result=false;
 		int count=0;
 		Connection conn=null;
 		PreparedStatement pstmt=null;
 		
 		try {
-			conn=DBOpen.getConnection();
+			conn=dataSource.getConnection();
 			String sql="delete from guestbook where no = ? and password= password(?) ";
 			pstmt=conn.prepareStatement(sql);
 			pstmt.setInt(1, no);
@@ -121,6 +129,6 @@ public class GuestBookDao {
 			DBClose.DBclose(conn, pstmt);
 		}
 		
-		return result;
+		return result;*/
 	}
 }
