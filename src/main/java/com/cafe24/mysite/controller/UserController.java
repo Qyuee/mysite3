@@ -1,17 +1,20 @@
 package com.cafe24.mysite.controller;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
+import com.cafe24.security.Auth;
+import com.cafe24.security.AuthUser;
 
+// @Auth 이렇게 Controller 자체에 접근 제어를 할 수 있는데, 일단 @Auth의 타겟을 변경해야 하고, @Auth가 method에 안 붙어 있고 class에 붙어있는지에 대한 검사가 필요함.
 @Controller
 @RequestMapping("/user")
 public class UserController {
@@ -20,13 +23,26 @@ public class UserController {
 	private UserService userService;
 	
 	@RequestMapping(value="/join", method=RequestMethod.GET)
-	public String join() {
+	public String join(
+			@ModelAttribute UserVo userVo 
+			) {
 		System.out.println("hello");
 		return "user/joinform"; 
 	}
 	
 	@RequestMapping(value="/join", method=RequestMethod.POST)
-	public String join(@ModelAttribute UserVo vo) {
+	public String join(@ModelAttribute @Validated UserVo vo, BindingResult bindingResult, Model model) {
+		
+		if(bindingResult.hasErrors()) {
+			/*List<ObjectError> list=bindingResult.getAllErrors();
+			for(ObjectError error : list) { 
+				System.out.println("Object Error : "+error);
+			}
+			
+			model.addAllAttributes(bindingResult.getModel());*/ 
+			return "user/joinform"; 
+		}
+		
 		System.out.println(vo);
 		userService.join(vo);
 		return "redirect:/user/joinsuccess";
@@ -42,7 +58,9 @@ public class UserController {
 		return "user/loginform";
 	}
 	
-	@RequestMapping(value="/login", method=RequestMethod.POST)
+	
+	
+	/*@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(@ModelAttribute UserVo vo, Model model, HttpSession session) {
 		// 세션을 다루는 방법은 HTTPSession이 있지만 기술침투이기에 다른 방법을 사용한다. -> 일단 보류
 		UserVo authUser=userService.getUserEmaliAndPassword(vo);
@@ -54,23 +72,26 @@ public class UserController {
 		
 		session.setAttribute("authUser", authUser);
 		return "redirect:/main";
-	}
+	}*/
 	
-	@RequestMapping("/logout")
+	/*@RequestMapping("/logout")
 	public String logout(HttpSession session) { 
 		session.removeAttribute("authUser");
 		session.invalidate();
 		return "redirect:/main";
-	}
+	}*/ 
+	
 	
 	/*
 	 * 차후 @Auth 와 인터셉터를 사용하여 접근제어를 할 것임.
 	 * @Auth는 우리가 직접 설정하는 어노테이션이다.(세션과 관련한)
 	 */
-	@RequestMapping(value="/modify", method=RequestMethod.GET)
-	public String modify(/*@AuthUser UserVo authUser와 같은 형태로 사용할 것임.*/HttpSession session) {
+	@Auth 
+	@RequestMapping(value="/modify", method=RequestMethod.GET) 
+	public String modify(@AuthUser UserVo authUser) {
 		// 접근 제어 필요
-		UserVo authUser=(UserVo)session.getAttribute("authUser");
+		System.out.println(authUser); 
+		
 		if(authUser==null) {
 			return "redirect:/main";
 		}
@@ -90,5 +111,6 @@ public class UserController {
 		request.setAttribute("errors2", errors2);
 		return "error/exception";
 	}*/
+	
 }
  

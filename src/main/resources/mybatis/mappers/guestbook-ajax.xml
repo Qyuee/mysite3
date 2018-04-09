@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="guestbookAjax">
+	<insert id="insertGuestBookAjax" parameterType="gbajaxvo">
+	<![CDATA[
+		insert into guestbookajax
+		values(null, #{name }, password(#{password }), #{content }, now()) 
+	]]>
+	<selectKey keyProperty="no" resultType="Long" order="AFTER">
+		select last_insert_id()
+	</selectKey>
+	</insert>
+	
+	<select id="getListAjax" parameterType="long" resultType="gbajaxvo">
+		<![CDATA[
+			select  
+			no, 
+			name, 
+			content,   
+			date_format(to_date, '%Y년 %m월 %d일 %H시 %i분 %s초') as to_date
+			from guestbookajax
+		]]>
+		<if test="_parameter > 0">
+      	<![CDATA[
+      		where no < #{_parameter}
+      	]]>
+        </if>
+        <![CDATA[
+        	order by no desc limit 0, 5
+        ]]>
+	</select>
+	
+	<delete id="deleteAjax" parameterType="gbajaxvo">
+		<![CDATA[
+		delete
+		from guestbookajax
+		where no = #{no }
+		 and password = password(#{password }) 
+		]]>
+	</delete>
+	
+	<select id="getByNo" parameterType="long" resultType="gbajaxvo">
+		<![CDATA[
+			select
+			no, 
+			name, 
+			content,   
+			date_format(to_date, '%Y년 %m월 %d일 %H시 %i분 %s초') as to_date
+			from guestbookajax
+			where no=#{no }
+		]]>
+	</select>
+	
+</mapper>

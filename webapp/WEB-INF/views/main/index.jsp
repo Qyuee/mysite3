@@ -19,12 +19,12 @@
 				<div id="site-introduction">
 					<c:choose>
 						<c:when test="${not empty sessionScope.authUser.name }">
-							<img id="profile" src="${pageContext.servletContext.contextPath }/images/profile_img.jpeg" style="width: 30%;">
+							<img id="profile" src="${pageContext.servletContext.contextPath }/assets/images/userImg.jpg" style="width: 30%;">
 							<h2>안녕하세요. ${sessionScope.authUser.name } mysite에 오신 것을 환영합니다.</h2>
 						</c:when> 
-						
+						 
 						<c:otherwise>
-							<img id="profile" src="${pageContext.servletContext.contextPath }/images/main.jpg" style="width: 100%;">
+							<img id="profile" src="${pageContext.servletContext.contextPath }/assets/images/test.jpg" style="width: 100%;">
 						</c:otherwise>
 					</c:choose>
 					
@@ -39,7 +39,7 @@
 		</div> 
 		
 		<c:import url="/WEB-INF/views/includes/navigation.jsp" >
-			<c:param name="menu" value="main"></c:param>
+			<c:param name="menu" value="main"></c:param> 
 		</c:import>
 		
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />

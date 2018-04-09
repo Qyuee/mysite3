@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<!-- 콘솔에 출력하는 로그의 형태 및 정의 -->
+	<appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>UTF-8</charset>
+			<Pattern>
+				%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
+			</Pattern>
+		</encoder>
+	</appender>
+
+	<!-- 파일로 출력하는 어댑터 추가 및 설정 -->
+	<appender name="fileAppender2" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>c:\LogExample\mysite3.log</file>
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>
+				%d{HH:mm:ss.SSS} [%thread] %-5level %logger{5} - %msg%n
+			</Pattern>
+		</encoder>
+		<!-- 압축 정보 -->
+		<!-- 10개까지 압축하고 1부터 다시 시작. 1부터 덮어쓰기. -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
+			<FileNamePattern>C:\LogExample\mysite3.%i.log.zip</FileNamePattern>
+			<MinIndex>1</MinIndex>
+			<MaxIndex>10</MaxIndex>
+		</rollingPolicy>
+		<triggeringPolicy
+			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+			<MaxFileSize>50KB</MaxFileSize>
+		</triggeringPolicy>
+	</appender>
+
+
+	<!--
+		com.cafe24.logexample2 아래 패키지 로그들만  C:\LogExample\logexample2.log 파일에만  출력하는 로거
+		파일에만 로그를 남기고 콘솔에는 출력하지 않는다.
+		또한, level이 info이기에 info, warn, error만 로그에 포함된다.
+	-->
+	<logger name="com.cafe24.mysite.exception"  level="info" additivity="false">
+            <appender-ref ref="fileAppender2" /> 
+    </logger> 
+      
+	 
+	<!-- 루트(글로벌) 로거  level : debug, info, warn, error -->
+	<!-- 위의 logger에 안걸리면 root에 해당. -->
+	<root level="info">   
+		<appender-ref ref="consoleAppender" />
+	</root>
+
+</configuration>

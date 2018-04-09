@@ -10,7 +10,7 @@
 		from users
 		where email= #{email } and password=password(#{password })
 		]]> 
-	</select>
+	</select> 
 	
 	<insert id="insert" parameterType="uservo">
 		<![CDATA[
@@ -20,4 +20,19 @@
 		]]> 
 	</insert>
 	
+	<select id="getByEmail" parameterType="String" resultType="uservo">
+		<![CDATA[
+		select no, name, email, gender  
+		from users 
+		where email= #{email } 
+		]]>  
+	</select>
+	
+	<select id="getByNo" parameterType="int" resultType="uservo">
+		<![CDATA[
+		select no, name, email
+		from users
+		where no=#{no }
+		]]>
+	</select>
 </mapper>

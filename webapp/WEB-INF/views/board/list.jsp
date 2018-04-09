@@ -9,6 +9,8 @@
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.servletContext.contextPath }/assets/css/board.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" 
+	src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 </head>
 <body>
 	<div id="container">
@@ -105,7 +107,9 @@
 				</div>				
 			</div>  
 		</div>
-		<c:import url="/WEB-INF/views/includes/navigation.jsp" />
+		<c:import url="/WEB-INF/views/includes/navigation.jsp">
+			<c:param name="menu" value="board" />
+		</c:import>
 		<c:import url="/WEB-INF/views/includes/footer.jsp" />
 	</div>
 </body>

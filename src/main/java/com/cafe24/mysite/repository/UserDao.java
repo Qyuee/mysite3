@@ -143,4 +143,8 @@ public class UserDao {
 		return result;*/
 	}
 	
+	public UserVo get(String email) {
+		return sqlsession.selectOne("user.getByEmail", email);
+	}
+	
 }

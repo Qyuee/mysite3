@@ -11,6 +11,28 @@
 <title>mysite</title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link href="${pageContext.servletContext.contextPath }/assets/css/guestbook.css" rel="stylesheet" type="text/css">
+<script src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+$(function(){
+	$("#btn-checkemail").click(function(){
+		// 이제 XMLHttpRequest를 이용하여 Ajax 통신을 하면 됨.
+		$.ajax({
+			url:"${pageContext.servletContext.contextPath }/api/guestbook/list",
+			type:"get",
+			data:"",
+			//contentType:""
+			success:function(response){
+				//console.log(response);
+				
+			},
+			error: function(xhr, status, e){
+				console.error(status+":"+e);
+				
+			}
+		});
+	});
+});
+</script>
 </head>
 <body> 
 	<div id="container">

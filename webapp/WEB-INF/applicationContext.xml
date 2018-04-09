@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
@@ -9,16 +9,20 @@
         http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
-        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd">
+        http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd">
+		
+	<!-- aspectj autoproxy AOP를 프록시 방식으로 한다. --> 
+	<aop:aspectj-autoproxy />
 
 	<!-- 어노테이션으로 스캐닝을 시작한다. -->
 	<context:annotation-config />
 
 	<!-- 모두 스캐닝하는 것은 비효율적이르모 base-package를 설정 -->
 	<context:component-scan
-		base-package="com.cafe24.mysite.repository, com.cafe24.mysite.service">
+		base-package="com.cafe24.mysite.repository, com.cafe24.mysite.service, com.cafe24.mysite.aspect, com.cafe24.mysite.exception">
 		<context:include-filter type="annotation"
-			expression="org.springframework.stereotype.Repository" />
+			expression="org.springframework.stereotype.Repository" /> 
 		<context:include-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />
 		<context:include-filter type="annotation"
@@ -34,23 +38,16 @@
 		<property name="username" value="webdb" />
 		<property name="password" value="webdb" />
 		<property name="maxActive" value="10" />
-		<property name="initialSize" value="8" /> 
+		<property name="initialSize" value="8" />
 	</bean>
 
 
-	<!-- MyBatis SqlSessionFactoryBean 
-	
-	SqlSessionFactory sqlsessionfactory=new SqlSessionFactoryBean();
-	s.setDateSource(datasource);
-	s.setConfigLocation(value);
-	
-	SqlSession sqlSession=new SqlSessionTemplate(sqlsessionFactory);
-	
-	sqlSession을 DI하여 사용
-	 
-	-->
+	<!-- MyBatis SqlSessionFactoryBean SqlSessionFactory sqlsessionfactory=new 
+		SqlSessionFactoryBean(); s.setDateSource(datasource); s.setConfigLocation(value); 
+		SqlSession sqlSession=new SqlSessionTemplate(sqlsessionFactory); sqlSession을 
+		DI하여 사용 -->
 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" /> 
+		<property name="dataSource" ref="dataSource" />
 		<property name="configLocation" value="classpath:mybatis/configuration.xml" />
 	</bean>
 

@@ -59,4 +59,5 @@ public class GuestBookController {
 		
 		return "redirect:/guestbook";
 	}
+
 }
