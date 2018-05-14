@@ -167,9 +167,21 @@
 						<directory>${project.basedir}/src/main/resources</directory>
 						<excludes>
 							<exclude>**/*.java</exclude>
-							<!-- .java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 -->
+							<!-- 
+							/src/main/resources/production에 있는 파일 중
+							.java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 
+							-->
 						</excludes>
 					</resource>
+					
+					<!-- /src/production/resources에 있는 파일도 classes로 옮겨라! -->
+					<resource>
+						<directory>${project.basedir}/src/production/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+						</excludes>
+					</resource>
+					
 				</resources>
 				
 				<plugins>
@@ -203,6 +215,57 @@
 				</dependency>
 			</dependencies>
 		</profile>
+		
+		<!-- 이클립스에서는 필요없음. 인텔리젼스에서는 필요함 -->
+		<!-- <profile>
+			<id>development</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>${project.basedir}/src/development/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+							
+							/src/main/resources/production에 있는 파일 중
+							.java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 
+							
+						</excludes>
+					</resource>
+				</resources>
+				
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<configuration>
+							<encoding>UTF-8</encoding>
+						</configuration>
+						<version>2.4.3</version>
+					</plugin>
+				</plugins>
+			</build>
+		
+			이클립스가 원래는 tomcat의 servlet-api를 알아서 찾아주지만
+				linux에서는 이클립스가 없기에 이 servlet-api를 따로 추가해야 함.
+			
+			 아래의 디펜던시는 필요없음
+			<dependencies>
+				Servlet
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+					<version>3.0.1</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>jsp-api</artifactId>
+					<version>2.0</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile> -->
+		
 	</profiles>
 	
 
