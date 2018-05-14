@@ -164,7 +164,7 @@
 			<build>
 				<resources>
 					<resource>
-						<directory>/src/main/resources</directory>
+						<directory>${project.basedir}/src/main/resources</directory>
 						<excludes>
 							<exclude>**/*.java</exclude>
 							<!-- .java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 -->
@@ -216,18 +216,20 @@
 					<target>1.8</target>
 				</configuration>
 			</plugin>
-			<plugin>
+			
+			<!-- <plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>3.0.0</version>
 				<configuration>
 					<warSourceDirectory>webapp</warSourceDirectory>
 				</configuration>
-			</plugin>
+			</plugin> -->
 			
 			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>tomcat-maven-plugin</artifactId>
+				<version>1.2.1</version>
 				<configuration>
 					<url>http://127.0.0.1/manager/text</url>
 					<path>/mysite3</path>
