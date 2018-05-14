@@ -12,6 +12,10 @@
 		<org.springframework-version>4.2.1.RELEASE</org.springframework-version>
 		<jcloverslf4j.version>1.7.6</jcloverslf4j.version>
 		<logback.version>1.1.1</logback.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
 
 	<!-- 중앙 저장소에서 가져오는 라이브러리 -->
@@ -131,7 +135,7 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>4.2.0.Final</version>
 		</dependency>
-		
+
 		<!-- common fileupload -->
 		<!-- 멀티파일 리졸브가 이걸 사용함. -->
 		<dependency>
@@ -152,7 +156,54 @@
 	<repositories>
 
 	</repositories>
-
+	
+	
+	<profiles>
+		<profile>
+			<id>production</id>
+			<build>
+				<resources>
+					<resource>
+						<directory>${project.basedir}/src/main/resources</directory>
+						<excludes>
+							<exclude>**/*.java</exclude>
+							<!-- .java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 -->
+						</excludes>
+					</resource>
+				</resources>
+				
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<configuration>
+							<encoding>UTF-8</encoding>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		
+			<!-- 이클립스가 원래는 tomcat의 servlet-api를 알아서 찾아주지만
+				linux에서는 이클립스가 없기에 이 servlet-api를 따로 추가해야 함.
+			 -->	
+			<dependencies>
+				<!-- Servlet -->
+				<dependency>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+					<version>3.0.1</version>
+					<scope>provided</scope>
+				</dependency>
+				<dependency>
+					<groupId>javax.servlet.jsp</groupId>
+					<artifactId>jsp-api</artifactId>
+					<version>2.0</version>
+					<scope>provided</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+	
 
 	<build>
 		<plugins>
@@ -169,6 +220,18 @@
 				<version>3.0.0</version>
 				<configuration>
 					<warSourceDirectory>webapp</warSourceDirectory>
+				</configuration>
+			</plugin>
+			
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tomcat-maven-plugin</artifactId>
+				<configuration>
+					<url>http://127.0.0.1/manager/text</url>
+					<path>/mysite3</path>
+					<username>admin</username>
+					<password>manager</password>
 				</configuration>
 			</plugin>
 		</plugins>
