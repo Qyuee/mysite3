@@ -17,11 +17,13 @@
 	rel="stylesheet" type="text/css">
 <link href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
 	rel="stylesheet" type="text/css">
+	
 <script type="text/javascript" 
 	src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
 <script type="text/javascript" 
 	src="${pageContext.request.contextPath }/assets/js/lightbox.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
 <script type="text/javascript">
 
 	$(document).ready(function(){
@@ -127,6 +129,23 @@
 			$("#image-preview").css("height", height);
 		}).change();
 		
+		
+		function wrap(){
+			var maskHeight=0;
+			var maskWidth=0;
+			
+			maskHeight=$(document).height();
+			maskWidth=$(document).width();
+			
+			$("#mask").css({
+				'width':maskWidth,
+				'height':maskHeight,
+				'z-index':1
+			});
+			
+			$("#mask").fadeTo("slow", 0.8);
+		}
+		
 	});
 	
 	jQuery.fn.center=function(){
@@ -139,22 +158,12 @@
 		console.log("현재 보이지 않는 top 영역 :"+$(window).scrollTop()); 
 		console.log("현재 보이지 않는 left 영역 :"+$(window).scrollLeft()); */
 		
-		this.css("top", Math.max(0, (($(window).height()-$(this).outerHeight())/2) + $(window).scrollTop())+"px");
-		this.css("left", Math.max(0, (($(window).width()-$(this).outerWidth())/2) + $(window).scrollLeft())+"px");
-		return this;
-	}
-	
-	function wrap(){
-		var maskHeight=$(document).height();
-		var maskWidth=$(document).width();
-		
-		$("#mask").css({
-			'width':maskWidth,
-			'height':maskHeight,
-			'z-index':1
+		$(window).resize(function(){ 
+			this.css("top", Math.max(0, (($(window).height()-$(this).outerHeight())/2) + $(window).scrollTop())+"px");
+			this.css("left", Math.max(0, (($(window).width()-$(this).outerWidth())/2) + $(window).scrollLeft())+"px");
 		});
 		
-		$("#mask").fadeTo("slow", 0.8);
+		return this;
 	}
 	
 	function readURL(input) {

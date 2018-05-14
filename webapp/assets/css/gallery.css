@@ -122,8 +122,8 @@
 #gallery div.img-viewer {
 	background-color: #ffffff;
 	border-radius: 20px;
-	top:0;
-	left: 0; 
+	/* 	top:0;
+	left: 0;  */
 }
 
 #gallery div.img-viewer div.viewer-content{

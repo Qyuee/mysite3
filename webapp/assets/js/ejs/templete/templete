@@ -1,0 +1,17 @@
+<li data-no='<%=no %>'>
+	<div id='content-outline'>
+		<div id='user-info'>
+			<a id='a-delete' data-no='<%=no %>'>
+			<img src='/mysite3/assets/images/delete.png' />
+			</a> 
+			<img id='user-img' alt='유저 사진' src='/mysite3/assets/images/user.png'>
+		</div>
+		 
+		<div id='gb-content'>
+			<label for='name'>작성자:</label>
+			<strong><%=name %></strong> 
+			<strong id='to_date'><%=to_date %></strong> 
+			<p><%=content %>.replace(/\n/gi, "<br>")</p>
+		</div>
+	</div>
+</li>

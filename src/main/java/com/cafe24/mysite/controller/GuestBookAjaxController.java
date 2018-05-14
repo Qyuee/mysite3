@@ -29,7 +29,7 @@ public class GuestBookAjaxController {
 	
 	@ResponseBody 
 	@RequestMapping(value="insert" , method=RequestMethod.POST)
-	public JSONResult insert(
+	public JSONResult insert( 
 			@RequestBody GuestBookAjaxVo guestBookAjaxVo
 			) {
 		System.out.println(" >>> vo : "+guestBookAjaxVo);
@@ -37,7 +37,7 @@ public class GuestBookAjaxController {
 		if(recent_pk!=0 && recent_pk>0) {
 			System.out.println("recent_pk : "+recent_pk);
 			GuestBookAjaxVo ajaxVo=service.get(guestBookAjaxVo.getNo());
-			System.out.println(" >>> "+ajaxVo);
+			System.out.println(" >>> "+ajaxVo); 
 			return JSONResult.success(ajaxVo);
 		}
 		return JSONResult.success("fail");

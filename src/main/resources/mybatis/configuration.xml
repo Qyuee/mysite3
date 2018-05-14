@@ -9,7 +9,7 @@
 	</typeAliases>
 	
 	<!-- SQL 매퍼 설정을 한다. 어느 위치의 어떤 xml파일을 대상으로 한다. -->
-	<mappers>
+	<mappers> 
 		<mapper resource="mybatis/mappers/user.xml" />
 		<mapper resource="mybatis/mappers/board.xml" />
 		<mapper resource="mybatis/mappers/guestbook.xml" /> 

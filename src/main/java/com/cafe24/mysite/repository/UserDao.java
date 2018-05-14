@@ -3,7 +3,6 @@ package com.cafe24.mysite.repository;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.List;
 
 import javax.sql.DataSource;
 

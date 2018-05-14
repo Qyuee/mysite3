@@ -40,7 +40,7 @@ public class UserController {
 			}
 			
 			model.addAllAttributes(bindingResult.getModel());*/ 
-			return "user/joinform"; 
+			return "user/joinform";
 		}
 		
 		System.out.println(vo);

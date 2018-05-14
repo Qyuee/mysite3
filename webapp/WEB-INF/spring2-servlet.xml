@@ -14,7 +14,7 @@
 	<!-- validator, conversionService, messageConverter를 자동으로 등록 -->
 	<mvc:annotation-driven>
 		<!-- 메세지 컨버터 빈 등록 (기본 : StringHttpMessageConverter) -->
-		<!-- 요청의 본문 내용을 그대로 가져올 수 있다. -->
+		<!-- 요청의 본문 내용을 그대로 가져올 수 있다. --> 
 		<!-- 응답에 콘텐츠 타입이 "text/html", 단순문자열로 응답할 수 있다. -->
 		<!-- 원래도 이 컨버터인데 한글 설정을 위해 재설정하는 상황이다. -->
 		<mvc:message-converters>
@@ -39,7 +39,7 @@
 		</mvc:message-converters>
 
 		<!-- argument resolver -->
-		<mvc:argument-resolvers>
+		<mvc:argument-resolvers> 
 			<bean class="com.cafe24.security.FileListArgumentResolver" />
 			<bean class="com.cafe24.security.HandlerMethodArgumentResolver" />
 			<bean class="com.cafe24.security.TestHandlerMethodArgumentResolver" />

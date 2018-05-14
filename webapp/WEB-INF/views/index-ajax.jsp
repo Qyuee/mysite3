@@ -11,6 +11,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath }/assets/css/guestbook-ajax.css" rel="stylesheet" type="text/css">
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/assets/js/ejs/ejs.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
 <script type="text/javascript">
@@ -44,6 +45,56 @@
 	});
 } */
 
+// jQuery 플러그인 만들기
+(function($){
+	$.fn.hello=function(){
+		var $element=$(this);
+		console.log($element.attr("id")+": hello!!");
+	}
+	
+})(jQuery);
+
+var ejsListItem=new EJS({
+	url:"${pageContext.request.contextPath }/assets/js/ejs/templete/templete"
+});
+
+var fetchList=function(){
+	if(isEnd==true){
+		return; 
+	}
+	
+	// 현재 리스트에서 가장 마지막 li에 있는 data-no값을 추출.
+	var index = $('#list-guestbook li').last().data('no') || 0;
+	
+	$.ajax({
+		url:"${pageContext.servletContext.contextPath }/guestbookajax/getlistAjax?startNo="+index,
+		type:"GET",
+		dataType:"json",   // 반드시 있어야 함. 헤더에 들어가는 accept 부분. 
+		success:function(response){
+			console.log(response);
+			
+			var str="";
+			if(response.result != "success"){
+				console.error(response.message);
+				return;
+			}
+			
+			// 끝 감지
+			if(response.data.length < 5){
+				alert("마지막 데이터 입니다.");
+			}
+			
+			var data=response.data;
+			$.each(data, function(index, vo){
+				render(false, vo);
+			});
+		}, 
+		error: function(xhr, status, e){
+			
+		}
+	});
+}
+
 var messageBox=function(title, message, callback){
 	$( "#dialog-message" ).attr("title", title);
 	$( "#dialog-message p" ).text(message);
@@ -59,22 +110,7 @@ var messageBox=function(title, message, callback){
 }
 
 var render=function(mode, vo){
-	var str="<li data-no='"+vo.no+"'>"+
-	 "	<div id='content-outline'>"+
-	 "		<div id='user-info'>"+
-	 "			<a id='a-delete' data-no='"+vo.no+"'>"+
-	 "				<img src='${pageContext.request.contextPath }/assets/images/delete.png' />"+
-	 "			</a>"+
-	 "			<img id='user-img' alt='유저 사진' src='${pageContext.request.contextPath }/assets/images/user.png'>"+
-	 "		</div>"+
-	 "		<div id='gb-content'>"+
-	 "		<label for='name'>작성자:</label>"+
-	 "			<strong>"+vo.name+"</strong>"+
-	 "			<strong id='to_date'>"+vo.to_date+"</strong>"+
-	 "			<p>"+vo.content.replace(/\n/gi, "<br>")+"</p>"+
-	 "		</div>"+
-	 "	</div>"+ 
-	 "</li>";
+	var str=ejsListItem.render(vo);
 	
 	if(mode==true){
 		$("#list-guestbook").prepend(str);
@@ -187,7 +223,7 @@ $(function(){
 		
 		$.ajax({
 			url:"${pageContext.servletContext.contextPath }/guestbookajax/insert",
-			type:"POST", 
+			type:"POST",
 			data: JSON.stringify(data), // json data를 String으로 변환. 
 			dataType:"json",   			// 반드시 있어야 함. 헤더에 들어가는 accept 부분.
 			contentType:"application/json",  //
@@ -203,40 +239,26 @@ $(function(){
 	});
 	
 	$("#btn-fetch").click(function(){
-		if(isEnd==true){
-			return; 
-		}
-		// 현재 리스트에서 가장 마지막 li에 있는 data-no값을 추출.
-		var index = $('#list-guestbook li').last().data('no') || 0;
-		
-		$.ajax({
-			url:"${pageContext.servletContext.contextPath }/guestbookajax/getlistAjax?startNo="+index,
-			type:"GET",
-			dataType:"json",   // 반드시 있어야 함. 헤더에 들어가는 accept 부분. 
-			success:function(response){
-				console.log(response);
-				
-				var str="";
-				if(response.result != "success"){
-					console.error(response.message);
-					return;
-				}
-				
-				// 끝 감지
-				if(response.data.length < 5){
-					alert("마지막 데이터 입니다.");
-				}
-				
-				var data=response.data;
-				$.each(data, function(index, vo){
-					render(false, vo);
-				});
-			}, 
-			error: function(xhr, status, e){
-				
-			}
-		});
+		fetchList(); 
 	});
+	
+	$(window).scroll(function(){
+		var $window=$(this);
+		var scrollTop = $window.scrollTop();  // 
+		var windowHeight=$window.height();    // 윈도우 높이
+		var documentHeight = $(document).height();  
+		
+		//console.log(scrollTop +":" + documentHeight + ":" + windowHeight);
+		
+		// documentHeight = scrollTop + windowHeight
+		// scrollbar의 Thumbs가 바닥에 도달하기 30px 전이라는 의미
+		if(scrollTop + windowHeight + 30 > documentHeight){
+			fetchList(); 
+		}
+	});
+	
+	$("#content").hello();
+	
 });
 
 /* function delete_proc(){
