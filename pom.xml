@@ -179,6 +179,7 @@
 						<configuration>
 							<encoding>UTF-8</encoding>
 						</configuration>
+						<version>2.4.3</version>
 					</plugin>
 				</plugins>
 			</build>
