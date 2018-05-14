@@ -164,7 +164,7 @@
 			<build>
 				<resources>
 					<resource>
-						<directory>${project.basedir}/src/main/resources</directory>
+						<directory>/src/main/resources</directory>
 						<excludes>
 							<exclude>**/*.java</exclude>
 							<!-- .java 파일을 제외하고 resource에 있는 것들을 classes 밑으로 위치 해줌 -->
